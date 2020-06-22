@@ -46,8 +46,8 @@ vectorCurtosisBeatTypeVforwardRR= c()
 vectorCurtosisBeatTypeVbackwardRR= c()
 
 min_value=150
-max_value=2600
-for (i in c(5)) {
+max_value=4000
+for (i in 1:length(numeroDeFicheros)) {
   annotations = read.table(paste0(numeroDeFicheros[i], "_Annotations.txt"),
                            header = TRUE)
   vector= annotations$TIME/360
@@ -56,8 +56,9 @@ for (i in c(5)) {
   RRs=finalVector[2:L]-finalVector[1:(L-1)]
   annotations$RRadelante=c(RRs,NA)
   annotations$RRatras=c(NA,RRs)
-  write.csv(annotations,paste0(numeroDeFicheros[i], "_AnnotationsWithRRs.csv"), quote =FALSE)
   newCsv=rbind(newCsv,annotations)
+  write.csv(annotations,paste0(numeroDeFicheros[i], "_AnnotationsWithRRs.csv"), quote =FALSE)
+  
   RRforward= na.omit(annotations$RRadelante)
   RRbackward=na.omit(annotations$RRatras)
 
@@ -242,8 +243,8 @@ RRbackwarda2=na.omit(Typea2$RRatras)
 valid_RRNadelantea2=RRforwarda2[RRforwarda2 >= min_value && RRforwarda2 <= max_value]
 valid_RRNatrasa2=RRbackwarda2[RRbackwarda >= min_value && RRbackwarda2 <= max_value]
 pdf("BeatTypeAMinusHistogram.pdf")
-hist(valid_RRNadelantea2, main = "Beat Type a histogram forward RR", xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-hist(valid_RRNatrasa2, main = "Beat Type a histogram backward RR",  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNadelantea2, main = "Beat Type a histogram forward RR", breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNatrasa2, main = "Beat Type a histogram backward RR", breaks = seq(min_value-1e-6,max_value+1e-6, len=15),  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
 dev.off()
 
 RRforwardA2=na.omit(TypeA2$RRadelante)
