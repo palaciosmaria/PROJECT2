@@ -45,13 +45,13 @@ vectorDesvBeatTypeVbackwardRR=c()
 vectorCurtosisBeatTypeVforwardRR= c()
 vectorCurtosisBeatTypeVbackwardRR= c()
 
-min_value=150
-max_value=4000
+min_value=200
+max_value=2600
 for (i in 1:length(numeroDeFicheros)) {
   annotations = read.table(paste0(numeroDeFicheros[i], "_Annotations.txt"),
                            header = TRUE)
   vector= annotations$TIME/360
-  finalVector=vector *1000
+  finalVector=vector*1000
   L=length(finalVector)
   RRs=finalVector[2:L]-finalVector[1:(L-1)]
   annotations$RRadelante=c(RRs,NA)
@@ -62,12 +62,12 @@ for (i in 1:length(numeroDeFicheros)) {
   RRforward= na.omit(annotations$RRadelante)
   RRbackward=na.omit(annotations$RRatras)
 
-    valid_RRNadelante=RRforward[RRforward >= min_value && RRforward <= max_value]
-    valid_RRNatras=RRbackward[RRbackward >= min_value && RRbackward <= max_value]
+    valid_RRNadelante=RRforward[RRforward >= min_value & RRforward <= max_value]
+    valid_RRNatras=RRbackward[RRbackward >= min_value & RRbackward <= max_value]
     if (length(valid_RRNadelante)>1 && length(valid_RRNatras)>1){
       pdf(file=paste(numeroDeFicheros[i],"_Histogram.pdf"))
-      hist(valid_RRNadelante, main = paste0(numeroDeFicheros[i]," histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-      hist(valid_RRNatras, main = paste0(numeroDeFicheros[i]," histogram backward RR"), breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+      hist(valid_RRNadelante, main = paste0(numeroDeFicheros[i]," histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+      hist(valid_RRNatras, main = paste0(numeroDeFicheros[i]," histogram backward RR"), breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
       dev.off()
   }
   
@@ -95,11 +95,11 @@ for (i in 1:length(numeroDeFicheros)) {
   
   RRforwardN= na.omit(TypeN$RRadelante)
   RRbackwardN=na.omit(TypeN$RRatras)
-  pdf(file=paste0(numeroDeFicheros[i],"_PacientBeatTypeNHistogram.pdf"))
-  valid_RRNadelanteN=RRforwardN[RRforwardN >= min_value && RRforwardN <= max_value]
-  valid_RRNatrasN=RRbackwardN[RRbackwardN >= min_value && RRbackwardN <= max_value]
-  hist(valid_RRNadelanteN, main = paste0(numeroDeFicheros[i],"Register Beat Type N histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-  hist(valid_RRNatrasN, main = paste0(numeroDeFicheros[i],"Register Beat Type N histogram backward RR"), breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+  pdf(file=paste0(numeroDeFicheros[i],"_PacientBeatTypesHistograms.pdf"))
+  valid_RRNadelanteN=RRforwardN[RRforwardN >= min_value & RRforwardN <= max_value]
+  valid_RRNatrasN=RRbackwardN[RRbackwardN >= min_value & RRbackwardN <= max_value]
+  hist(valid_RRNadelanteN, main = paste0(numeroDeFicheros[i],"Register Beat Type N histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+  hist(valid_RRNatrasN, main = paste0(numeroDeFicheros[i],"Register Beat Type N histogram backward RR"), breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
   vectorMeanBeatTypeNforwardRR=c(vectorMeanBeatTypeNforwardRR ,mean(RRforwardN))
   vectorMeanBeatTypeNbackwardRR= c(vectorMeanBeatTypeNbackwardRR ,mean(RRbackwardN))
   vectorDesvBeatTypeNforwardRR=c(vectorDesvBeatTypeNforwardRR, sd(RRforwardN))
@@ -110,60 +110,88 @@ for (i in 1:length(numeroDeFicheros)) {
   if (length (Typea)>1){
     RRforwarda=na.omit(Typea$RRadelante)
     RRbackwarda=na.omit(Typea$RRatras)
-    valid_RRNadelantea=RRforwarda[RRforwarda >= min_value && RRforwarda <= max_value]
-    valid_RRNatrasa=RRbackwarda[RRbackwarda >= min_value && RRbackwarda <= max_value]
-    hist(valid_RRNadelantea, main = paste0(numeroDeFicheros[i],"Register Beat Type a histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-    hist(valid_RRNatrasa, main = paste0(numeroDeFicheros[i],"Register Beat Type a histogram backward RR"),breaks = seq(min_value-1e-6,max_value+1e-6), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+    valid_RRNadelantea=RRforwarda[RRforwarda >= min_value & RRforwarda <= max_value]
+    valid_RRNatrasa=RRbackwarda[RRbackwarda >= min_value & RRbackwarda <= max_value]
+    hist(valid_RRNadelantea, main = paste0(numeroDeFicheros[i],"Register Beat Type a histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+    hist(valid_RRNatrasa, main = paste0(numeroDeFicheros[i],"Register Beat Type a histogram backward RR"),breaks = seq(min_value-1e-6,max_value+1e-6,100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
     vectorMeanBeatTypeAMinusforwardRR=c(vectorMeanBeatTypeAMinusforwardRR ,mean(RRforwarda))
     vectorMeanBeatTypeAMinusbackwardRR=c(vectorMeanBeatTypeAMinusbackwardRR ,mean(RRbackwarda))
     vectorDesvBeatTypeAMinusforwardRR=c(vectorDesvBeatTypeAMinusforwardRR ,sd(RRforwarda))
     vectorDesvBeatTypeAMinusbackwardRR=c(vectorDesvBeatTypeAMinusbackwardRR ,sd(RRbackwarda))
     vectorCurtosisBeatTypeAMinusforwardRR= c(vectorCurtosisBeatTypeAMinusforwardRR ,kurtosis(RRforwarda))
-    vectorCurtosisABeatTypeMinusbackwardRR= c(vectorCurtosisBeatTypeAMinusbackwardRR ,kurtosis(RRbackwarda))
+    vectorCurtosisBeatTypeAMinusbackwardRR= c(vectorCurtosisBeatTypeAMinusbackwardRR ,kurtosis(RRbackwarda))
+  }else {
+    vectorMeanBeatTypeAMinusforwardRR=c(vectorMeanBeatTypeAMinusforwardRR ,NA)
+    vectorMeanBeatTypeAMinusbackwardRR=c(vectorMeanBeatTypeAMinusbackwardRR ,NA)
+    vectorDesvBeatTypeAMinusforwardRR=c(vectorDesvBeatTypeAMinusforwardRR ,NA)
+    vectorDesvBeatTypeAMinusbackwardRR=c(vectorDesvBeatTypeAMinusbackwardRR ,NA)
+    vectorCurtosisBeatTypeAMinusforwardRR= c(vectorCurtosisBeatTypeAMinusforwardRR ,NA)
+    vectorCurtosisBeatTypeAMinusbackwardRR= c(vectorCurtosisBeatTypeAMinusbackwardRR ,NA)
+    
   }
   if (length (TypeA)>1){
     RRforwardA=na.omit(TypeA$RRadelante)
     RRbackwardA=na.omit(TypeA$RRatras)
-    valid_RRNadelanteA=RRforwardA[RRforwardA >= min_value && RRforwardA <= max_value]
-    valid_RRNatrasA=RRbackwardA[RRbackwardA >= min_value && RRbackwardA <= max_value]
-    hist(valid_RRNadelanteA, main = paste0(numeroDeFicheros[i],"Register Beat Type A histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-    hist(valid_RRNatrasA, main = paste0(numeroDeFicheros[i],"Register Beat Type A histogram backward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, len=15),  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+    valid_RRNadelanteA=RRforwardA[RRforwardA >= min_value & RRforwardA <= max_value]
+    valid_RRNatrasA=RRbackwardA[RRbackwardA >= min_value & RRbackwardA <= max_value]
+    hist(valid_RRNadelanteA, main = paste0(numeroDeFicheros[i],"Register Beat Type A histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6,100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+    hist(valid_RRNatrasA, main = paste0(numeroDeFicheros[i],"Register Beat Type A histogram backward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, 100),  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
     vectorMeanBeatTypeAforwardRR=c(vectorMeanBeatTypeAforwardRR ,mean(RRforwardA))
     vectorMeanBeatTypeAbackwardRR=c(vectorMeanBeatTypeAbackwardRR ,mean(RRbackwardA))
     vectorDesvBeatTypeAforwardRR=c(vectorDesvBeatTypeAforwardRR ,sd(RRforwardA))
     vectorDesvBeatTypeAbackwardRR=c(vectorDesvBeatTypeAbackwardRR ,sd(RRbackwardA))
     vectorCurtosisBeatTypeAforwardRR= c(vectorCurtosisBeatTypeAforwardRR ,kurtosis(RRforwardA))
     vectorCurtosisBeatTypeAbackwardRR= c(vectorCurtosisBeatTypeAbackwardRR ,kurtosis(RRbackwardA))
-    
+  }else{
+    vectorMeanBeatTypeAforwardRR=c(vectorMeanBeatTypeAforwardRR ,NA)
+    vectorMeanBeatTypeAbackwardRR=c(vectorMeanBeatTypeAbackwardRR ,NA)
+    vectorDesvBeatTypeAforwardRR=c(vectorDesvBeatTypeAforwardRR ,NA)
+    vectorDesvBeatTypeAbackwardRR=c(vectorDesvBeatTypeAbackwardRR ,NA)
+    vectorCurtosisBeatTypeAforwardRR= c(vectorCurtosisBeatTypeAforwardRR ,NA)
+    vectorCurtosisBeatTypeAbackwardRR= c(vectorCurtosisBeatTypeAbackwardRR ,NA)
     }
   if (length (TypeF)>1){
     RRforwardF=na.omit(TypeF$RRadelante)
     RRbackwardF=na.omit(TypeF$RRatras)
-    valid_RRNadelanteF=RRforwardF[RRforwardF >= min_value && RRforwardF <= max_value]
-    valid_RRNatrasF=RRbackwardF[RRbackwardF >= min_value && RRbackwardF <= max_value]
-    hist(valid_RRNadelanteF, main = paste0(numeroDeFicheros[i],"Register Beat Type F histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-    hist(valid_RRNatrasF, main = paste0(numeroDeFicheros[i],"Register Beat Type F histogram backward RR"), breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+    valid_RRNadelanteF=RRforwardF[RRforwardF >= min_value & RRforwardF <= max_value]
+    valid_RRNatrasF=RRbackwardF[RRbackwardF >= min_value & RRbackwardF <= max_value]
+    hist(valid_RRNadelanteF, main = paste0(numeroDeFicheros[i],"Register Beat Type F histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+    hist(valid_RRNatrasF, main = paste0(numeroDeFicheros[i],"Register Beat Type F histogram backward RR"), breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
     vectorMeanBeatTypeFforwardRR=c(vectorMeanBeatTypeFforwardRR ,mean(RRforwardF))
     vectorMeanBeatTypeFbackwardRR=c(vectorMeanBeatTypeFbackwardRR ,mean(RRbackwardF))
     vectorDesvBeatTypeFforwardRR=c(vectorDesvBeatTypeFforwardRR ,sd(RRforwardF))
     vectorDesvBeatTypeFbackwardRR=c(vectorDesvBeatTypeFbackwardRR ,sd(RRbackwardF))
     vectorCurtosisBeatTypeFforwardRR=c(vectorCurtosisBeatTypeFforwardRR ,kurtosis(RRforwardF))
     vectorCurtosisBeatTypeFbackwardRR= c(vectorCurtosisBeatTypeFbackwardRR ,kurtosis(RRbackwardF))
-    
+  }else{
+    vectorMeanBeatTypeFforwardRR=c(vectorMeanBeatTypeFforwardRR ,NA)
+    vectorMeanBeatTypeFbackwardRR=c(vectorMeanBeatTypeFbackwardRR ,NA)
+    vectorDesvBeatTypeFforwardRR=c(vectorDesvBeatTypeFforwardRR ,NA)
+    vectorDesvBeatTypeFbackwardRR=c(vectorDesvBeatTypeFbackwardRR ,NA)
+    vectorCurtosisBeatTypeFforwardRR=c(vectorCurtosisBeatTypeFforwardRR ,NA)
+    vectorCurtosisBeatTypeFbackwardRR= c(vectorCurtosisBeatTypeFbackwardRR ,NA) 
     }
   if (length (TypeV)>1){
     RRforwardV=na.omit(TypeV$RRadelante)
     RRbackwardV=na.omit(TypeV$RRatras)
-    valid_RRNadelanteV=RRforwardV[RRforwardV >= min_value && RRforwardV <= max_value]
-    valid_RRNatrasV=RRbackwardV[RRbackwardV >= min_value && RRbackwardV <= max_value]
-    hist(valid_RRNadelanteV, main = paste0(numeroDeFicheros[i],"Register Beat Type V histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-    hist(valid_RRNatrasV, main = paste0(numeroDeFicheros[i],"Register Beat Type V histogram backward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, len=15),  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+    valid_RRNadelanteV=RRforwardV[RRforwardV >= min_value & RRforwardV <= max_value]
+    valid_RRNatrasV=RRbackwardV[RRbackwardV >= min_value & RRbackwardV <= max_value]
+    hist(valid_RRNadelanteV, main = paste0(numeroDeFicheros[i],"Register Beat Type V histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+    hist(valid_RRNatrasV, main = paste0(numeroDeFicheros[i],"Register Beat Type V histogram backward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, 100),  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
     vectorMeanBeatTypeVforwardRR=c(vectorMeanBeatTypeVforwardRR ,mean(RRforwardV))
     vectorMeanBeatTypeVbackwardRR=c(vectorMeanBeatTypeVbackwardRR ,mean(RRbackwardV))
     vectorDesvBeatTypeVforwardRR=c(vectorDesvBeatTypeVforwardRR ,sd(RRforwardV))
     vectorDesvBeatTypeVbackwardRR=c(vectorDesvBeatTypeVbackwardRR ,sd(RRbackwardV))
     vectorCurtosisBeatTypeVforwardRR=c(vectorCurtosisBeatTypeVforwardRR ,kurtosis(RRforwardV))
     vectorCurtosisBeatTypeVbackwardRR=c(vectorCurtosisBeatTypeVbackwardRR ,kurtosis(RRbackwardV))
+  }else{
+    vectorMeanBeatTypeVforwardRR=c(vectorMeanBeatTypeVforwardRR ,NA)
+    vectorMeanBeatTypeVbackwardRR=c(vectorMeanBeatTypeVbackwardRR ,NA)
+    vectorDesvBeatTypeVforwardRR=c(vectorDesvBeatTypeVforwardRR ,NA)
+    vectorDesvBeatTypeVbackwardRR=c(vectorDesvBeatTypeVbackwardRR ,NA)
+    vectorCurtosisBeatTypeVforwardRR=c(vectorCurtosisBeatTypeVforwardRR ,NA)
+    vectorCurtosisBeatTypeVbackwardRR=c(vectorCurtosisBeatTypeVbackwardRR ,NA)
+      
     }
   dev.off()
 
@@ -231,47 +259,47 @@ write.csv(Typea,paste0("AnnotationsWithRRsBeatTypeAMinus.csv"), quote =FALSE)
 RRforwardN2= na.omit(TypeN2$RRadelante)
 RRbackwardN2=na.omit(TypeN2$RRatras)
 pdf("BeatTypeNHistogram.pdf")
-valid_RRNadelanteN2=RRforwardN2[RRforwardN2 >= min_value && RRforwardN2 <= max_value]
-valid_RRNatrasN2=RRbackwardN2[RRbackwardN2 >= min_value && RRbackwardN2 <= max_value]
-hist(valid_RRNadelanteN2, main = "Beat Type N histogram forward RR", xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-hist(valid_RRNatrasN2, main = "Beat Type N histogram backward RR",  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+valid_RRNadelanteN2=RRforwardN2[RRforwardN2 >= min_value & RRforwardN2 <= max_value]
+valid_RRNatrasN2=RRbackwardN2[RRbackwardN2 >= min_value & RRbackwardN2 <= max_value]
+hist(valid_RRNadelanteN2, main = "Beat Type N histogram forward RR", breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNatrasN2, main = "Beat Type N histogram backward RR", breaks = seq(min_value-1e-6,max_value+1e-6, 100),  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
 dev.off()
 
 
 RRforwarda2=na.omit(Typea2$RRadelante)
 RRbackwarda2=na.omit(Typea2$RRatras)
-valid_RRNadelantea2=RRforwarda2[RRforwarda2 >= min_value && RRforwarda2 <= max_value]
-valid_RRNatrasa2=RRbackwarda2[RRbackwarda >= min_value && RRbackwarda2 <= max_value]
+valid_RRNadelantea2=RRforwarda2[RRforwarda2 >= min_value & RRforwarda2 <= max_value]
+valid_RRNatrasa2=RRbackwarda2[RRbackwarda >= min_value & RRbackwarda2 <= max_value]
 pdf("BeatTypeAMinusHistogram.pdf")
-hist(valid_RRNadelantea2, main = "Beat Type a histogram forward RR", breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-hist(valid_RRNatrasa2, main = "Beat Type a histogram backward RR", breaks = seq(min_value-1e-6,max_value+1e-6, len=15),  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNadelantea2, main = "Beat Type a histogram forward RR", breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNatrasa2, main = "Beat Type a histogram backward RR", breaks = seq(min_value-1e-6,max_value+1e-6, 100),  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
 dev.off()
 
 RRforwardA2=na.omit(TypeA2$RRadelante)
 RRbackwardA2=na.omit(TypeA2$RRatras)
-valid_RRNadelanteA2=RRforwardA2[RRforwardA2 >= min_value && RRforwardA2 <= max_value]
-valid_RRNatrasA2=RRbackwardA2[RRbackwardA2 >= min_value && RRbackwardA2 <= max_value]
+valid_RRNadelanteA2=RRforwardA2[RRforwardA2 >= min_value & RRforwardA2 <= max_value]
+valid_RRNatrasA2=RRbackwardA2[RRbackwardA2 >= min_value & RRbackwardA2 <= max_value]
 pdf("BeatTypeAHistogram.pdf")
-hist(valid_RRNadelanteA2, main = "Beat Type A histogram forward RR", xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-hist(valid_RRNatrasA2, main = "Beat Type A histogram backward RR",  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNadelanteA2, main = "Beat Type A histogram forward RR",breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNatrasA2, main = "Beat Type A histogram backward RR", breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
 dev.off()
 
 RRforwardF2=na.omit(TypeF2$RRadelante)
 RRbackwardF2=na.omit(TypeF2$RRatras)
-valid_RRNadelanteF2=RRforwardF2[RRforwardF2 >= min_value && RRforwardF2 <= max_value]
-valid_RRNatrasF2=RRbackwardF2[RRbackwardF2 >= min_value && RRbackwardF2 <= max_value]
+valid_RRNadelanteF2=RRforwardF2[RRforwardF2 >= min_value & RRforwardF2 <= max_value]
+valid_RRNatrasF2=RRbackwardF2[RRbackwardF2 >= min_value & RRbackwardF2 <= max_value]
 pdf("BeatTypeFHistogram.pdf")
-hist(valid_RRNadelanteF2, main = "Beat Type F histogram forward RR", xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-hist(valid_RRNatrasF2, main = "Beat Type F histogram backward RR",  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNadelanteF2, main = "Beat Type F histogram forward RR", breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNatrasF2, main = "Beat Type F histogram backward RR",breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
 dev.off()
 
 RRforwardV2=na.omit(TypeV2$RRadelante)
 RRbackwardV2=na.omit(TypeV2$RRatras)
-valid_RRNadelanteV2=RRforwardV2[RRforwardV2 >= min_value && RRforwardV2 <= max_value]
-valid_RRNatrasV2=RRbackwardV2[RRbackwardV2 >= min_value && RRbackwardV2 <= max_value]
+valid_RRNadelanteV2=RRforwardV2[RRforwardV2 >= min_value & RRforwardV2 <= max_value]
+valid_RRNatrasV2=RRbackwardV2[RRbackwardV2 >= min_value & RRbackwardV2 <= max_value]
 pdf("BeatTypeVHistogram.pdf")
-hist(valid_RRNadelanteV2, main = "Beat Type V histogram forward RR", xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
-hist(valid_RRNatrasV2, main = "Beat Type V histogram backward RR",  xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNadelanteV2, main = "Beat Type V histogram forward RR",breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+hist(valid_RRNatrasV2, main = "Beat Type V histogram backward RR", breaks = seq(min_value-1e-6,max_value+1e-6, 100), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
 dev.off()
 
 dfEstatisticsBeatTypes= data.frame(
@@ -313,5 +341,5 @@ dfEstatisticsBeatTypes= data.frame(
   stringsAsFactors = FALSE
 )
 
-dfStatisticsBeatTypes <- as.data.frame(t(dfEstatisticsBeatTypes))
-write.csv(dfStatisticsBeatTypes,paste0("StatisticsOfBeatTypes.csv"), quote =FALSE)
+
+write.csv(dfEstatisticsBeatTypes,paste0("StatisticsOfBeatTypes.csv"), quote =FALSE)
