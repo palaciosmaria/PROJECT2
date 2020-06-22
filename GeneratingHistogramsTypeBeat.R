@@ -45,9 +45,9 @@ vectorDesvBeatTypeVbackwardRR=c()
 vectorCurtosisBeatTypeVforwardRR= c()
 vectorCurtosisBeatTypeVbackwardRR= c()
 
-min_value=200
+min_value=150
 max_value=2600
-for (i in 1:length(numeroDeFicheros)) {
+for (i in c(5)) {
   annotations = read.table(paste0(numeroDeFicheros[i], "_Annotations.txt"),
                            header = TRUE)
   vector= annotations$TIME/360
@@ -67,8 +67,9 @@ for (i in 1:length(numeroDeFicheros)) {
       pdf(file=paste(numeroDeFicheros[i],"_Histogram.pdf"))
       hist(valid_RRNadelante, main = paste0(numeroDeFicheros[i]," histogram forward RR"),breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
       hist(valid_RRNatras, main = paste0(numeroDeFicheros[i]," histogram backward RR"), breaks = seq(min_value-1e-6,max_value+1e-6, len=15), xlab = "RR distance in time (ms)", ylab = "Frequency", xlim=c(min_value,max_value))
+      dev.off()
   }
-  dev.off()
+  
   
   vectorMeanadelante=c(vectorMeanadelante,mean(RRforward))
   vectorMeanatras=c(vectorMeanatras,mean(RRbackward))
